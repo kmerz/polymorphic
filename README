@@ -1,13 +1,39 @@
 Polymorphic
 ===========
 
-Introduction goes here.
+Polymorphic is alternative implementation for polymorphic associations in Rails.
+Instead of using one join table which includes all associations, there are
+one join table for each associations.
+
+Polymorphic works for has_many and has_one associations.
 
 
 Example
 =======
 
-Example goes here.
+In the example we have three classes:
+  class Car < ActiveRecord::Base
+    has_and_belongs_to_many :streets, :join_table => "street_cars"
+  end
 
+  class Bike < ActiveRecord::Base
+    has_and_belongs_to_many :streets, :join_table => "street_bikes"
+  end
 
-Copyright (c) 2012 [name of plugin creator], released under the MIT license
+  class Street < ActiveRecord::Base
+    has_and_belongs_to_many :cars, :join_table => "street_cars"
+    has_and_belongs_to_many :bikes, :join_table => "street_bikes"
+    polymorphic :vehicles, :cars, :bikes
+  end
+
+The has_many associations for cars and bikes in Street need join tables. They
+are normal has_many associations as known to rails.
+
+  polymorphic :vehicles, :cars, :bikes
+will add a PolyProxy just which behaves like an AssociationProxy wich provied
+an interface to the connected has_many associations:
+  s = Street.find(1)
+  c = Car.first
+  s.vehicles << c
+
+Copyright (c) 2012 genua mbh Kirchheim bei Muenchen, released under the MIT license
