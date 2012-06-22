@@ -38,7 +38,7 @@ class ActiveRecord::Base
 		options = assocs.last.is_a?(Hash) ? assocs.pop : {}
 
     raise "#{name.inspect} already defined" if self.respond_to?(name)
-    reflections = self.reflections
+    reflectioas = self.reflections
 
     # determine if the association will be a colection or not.
     if assocs.all? {|oth| reflections[oth.to_sym].collection? }

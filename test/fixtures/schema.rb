@@ -32,10 +32,12 @@ ActiveRecord::Schema.define do
   create_table "meats", :force => true do |t|
     t.column "name", :text
     t.column "id", :integer
+    t.column "dish_id", :integer
   end
 
   create_table "vegs", :force => true do |t|
     t.column "name", :text
     t.column "id", :integer
+    t.column "dish_id", :integer
   end
 end

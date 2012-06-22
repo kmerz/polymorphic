@@ -27,23 +27,25 @@ end
 
 class Meat < ActiveRecord::Base
 end
+
 class Veg < ActiveRecord::Base
 end
+
 class Dish < ActiveRecord::Base
   has_one :meat
   has_one :veg
-  polymorpic :ingredient
+  polymorphic :ingredient, :meat, :veg
 end
 
 class PolymorphicTest < ActiveSupport::TestCase
 
-  test "association works" do
+  test "polymorphic works with has_many associations" do
     assert s = Street.new
     assert_equal false, s.vehicles.nil?
     assert_equal [], s.vehicles
   end
 
-  test "assignent works" do
+  test "assignent works with has_many associations" do
     s = Street.first
     assert s.vehicles
     assert s.vehicles << Car.first
@@ -54,19 +56,19 @@ class PolymorphicTest < ActiveSupport::TestCase
     assert_equal Bike.first, s.vehicles.last
   end
 
-  test "deletion works" do
+  test "deletion works with has_many associations" do
     s = Street.new
     assert s.vehicles << Car.first
     assert s.vehicles.delete_all
     assert_equal [], s.vehicles
   end
 
-  test "inspect works" do
+  test "inspect works with has_many associations" do
     s = Street.new
     assert_nothing_raised { s.vehicles.inspect }
   end
 
-  test "pop works" do
+  test "pop works with has_many associations" do
     s = Street.first
     vehicles_size = s.vehicles.size
     assert vehicle = s.vehicles.pop
@@ -74,7 +76,7 @@ class PolymorphicTest < ActiveSupport::TestCase
     assert_equal vehicles_size - 1, s.vehicles.size
   end
 
-  test "clear works" do
+  test "clear works with has_many associations" do
     s = Street.new
     assert s.vehicles << Bike.first
     assert_not_equal 0, s.vehicles.size
@@ -82,11 +84,17 @@ class PolymorphicTest < ActiveSupport::TestCase
     assert_equal [], s.vehicles
   end
 
-  test "has one association" do
+  test "polymorphic association works with has one association" do
     assert f = Dish.new
     assert f.ingredient
-    assert f.ingredient = Veg.new
+    v = Veg.create
+    m = Meat.create
+    assert f.ingredient = v
+    assert_equal v, f.ingredient
     assert f.save!
+    assert f.ingredient = m
+    assert f.save!
+    assert_equal m, f.ingredient
   end
 
 end
