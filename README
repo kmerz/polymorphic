@@ -7,6 +7,11 @@ one join table for each associations.
 
 Polymorphic works for has_many and has_one associations.
 
+To use polymorphic edit config/application.rb:
+  config.plugins = [ :polymorphic ]
+And included to desired file:
+  requrie 'polymorphic'
+
 
 Example
 =======
