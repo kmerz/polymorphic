@@ -15,6 +15,10 @@ class Car < ActiveRecord::Base
   has_and_belongs_to_many :streets, :join_table => "street_cars"
 end
 
+class Bicycle < ActiveRecord::Base
+  has_and_belongs_to_many :streets, :join_table => "street_bicycle"
+end
+
 class Bike < ActiveRecord::Base
   has_and_belongs_to_many :streets, :join_table => "street_bikes"
 end
@@ -22,6 +26,7 @@ end
 class Street < ActiveRecord::Base
   has_and_belongs_to_many :cars, :join_table => "street_cars"
   has_and_belongs_to_many :bikes, :join_table => "street_bikes"
+  has_and_belongs_to_many :bicycle, :join_table => "street_bicycle"
   polymorphic :vehicles, :cars, :bikes
 end
 
@@ -42,6 +47,14 @@ class PolymorphicTest < ActiveSupport::TestCase
   test "polymorphic works with has_many associations" do
     assert s = Street.new
     assert_equal false, s.vehicles.nil?
+    assert_equal [], s.vehicles
+  end
+
+  test "polymorphic works only with polymorphed associations" do
+    assert s = Street.new
+    assert_equal false, s.vehicles.nil?
+    assert_equal [], s.vehicles
+    s.vehicles << Bicycle.new
     assert_equal [], s.vehicles
   end
 

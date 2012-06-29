@@ -19,7 +19,17 @@ ActiveRecord::Schema.define do
 		t.column "id", :integer
   end
 
-  create_table "streets", :force => true do |t|
+ 	create_table "street_bicycles", :force => true do |t|
+		t.column "street_id", :integer
+		t.column "bicycle_id", :integer
+	end
+
+  create_table "bicycles", :force => true do |t|
+	  t.column "name", :text
+		t.column "id", :integer
+  end
+
+ create_table "streets", :force => true do |t|
 	  t.column "name", :text
 		t.column "id", :integer
   end
